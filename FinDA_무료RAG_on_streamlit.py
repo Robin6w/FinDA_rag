@@ -39,8 +39,7 @@ def load_embeddings():
     )
 
 @st.cache_resource
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+import torch from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 @st.cache_resource
 def load_llm():
@@ -165,4 +164,5 @@ if user_q:
     st.session_state.chat_history.append(
         {"role": "assistant", "content": answer}
     )
+
 
