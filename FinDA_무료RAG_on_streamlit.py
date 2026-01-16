@@ -39,15 +39,25 @@ def load_embeddings():
     )
 
 @st.cache_resource
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+
+@st.cache_resource
 def load_llm():
     tokenizer = AutoTokenizer.from_pretrained(LLM_MODEL, use_fast=True)
-    model = AutoModelForCausalLM.from_pretrained(LLM_MODEL)
+
+    model = AutoModelForCausalLM.from_pretrained(
+        LLM_MODEL,
+        torch_dtype=torch.float16,      # ✅ 메모리 절감 핵심
+        low_cpu_mem_usage=True,         # ✅ 로딩 메모리 절감
+        device_map="cpu",               # ✅ Cloud는 CPU
+    )
 
     gen = pipeline(
         "text-generation",
         model=model,
         tokenizer=tokenizer,
-        max_new_tokens=MAX_NEW_TOKENS,
+        max_new_tokens=128,             # ✅ 256 → 128로 내리기
         do_sample=False,
         temperature=0.0,
         repetition_penalty=1.05,
@@ -155,3 +165,4 @@ if user_q:
     st.session_state.chat_history.append(
         {"role": "assistant", "content": answer}
     )
+
