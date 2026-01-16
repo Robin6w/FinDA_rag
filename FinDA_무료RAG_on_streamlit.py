@@ -1,5 +1,6 @@
 import tempfile
 import streamlit as st
+import torch   # ✅ 여기
 
 from langchain_community.document_loaders import PDFPlumberLoader
 from langchain_community.vectorstores import FAISS
@@ -11,6 +12,7 @@ from transformers import (
     AutoModelForCausalLM,
     pipeline
 )
+
 
 # --------------------------------------------------
 # Streamlit 기본 설정
@@ -162,6 +164,7 @@ if user_q:
     st.session_state.chat_history.append(
         {"role": "assistant", "content": answer}
     )
+
 
 
 
